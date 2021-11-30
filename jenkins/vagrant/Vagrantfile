@@ -1,4 +1,4 @@
-VM_GROUP_NAME='/edtool_jenkins'
+VM_GROUP_NAME='/portfolio_jenkins_edtool'
 
 Vagrant.configure("2") do |config|
 
