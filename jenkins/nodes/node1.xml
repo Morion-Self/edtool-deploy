@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<slave>
+  <name>node1</name>
+  <description>Нода для портфолио. В своих реальных проектах я все собираю на master-ноде</description>
+  <remoteFS>/home/vagrant/jenkins_workdir</remoteFS>
+  <numExecutors>1</numExecutors>
+  <mode>NORMAL</mode>
+  <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
+  <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@1.33.0">
+    <host>192.168.56.101</host>
+    <port>22</port>
+    <credentialsId>ssh-key-node1</credentialsId>
+    <launchTimeoutSeconds>60</launchTimeoutSeconds>
+    <maxNumRetries>10</maxNumRetries>
+    <retryWaitTime>15</retryWaitTime>
+    <sshHostKeyVerificationStrategy class="hudson.plugins.sshslaves.verifiers.ManuallyTrustedKeyVerificationStrategy">
+      <requireInitialManualTrust>false</requireInitialManualTrust>
+    </sshHostKeyVerificationStrategy>
+    <tcpNoDelay>true</tcpNoDelay>
+  </launcher>
+  <label>ubuntu npm ui5</label>
+  <nodeProperties/>
+</slave>
