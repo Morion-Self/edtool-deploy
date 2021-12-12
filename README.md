@@ -49,8 +49,8 @@
  
 1. Create tasks:
 
-    `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ create-job front-deploy-test< jobs/front-deploy-test.xml`
-    `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ create-job front-deploy-prd< jobs/front-deploy-prd.xml`
+    - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ create-job front-deploy-test< jobs/front-deploy-test.xml`    
+    - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ create-job front-deploy-prd< jobs/front-deploy-prd.xml`
 
 ## Deploy
 
