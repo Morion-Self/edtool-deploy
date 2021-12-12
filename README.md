@@ -66,3 +66,6 @@
 
     - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ -webSocket build front-deploy-test -s -v`
     - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ -webSocket build front-deploy-prd -s -v`
+
+## TODO:
+1. CI/CD for backend
