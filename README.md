@@ -1,14 +1,68 @@
-# Deprecated
-*New "live"-portfolio will be soon*
+# CI/CD for edTool.ru
 
-# Портфолио DevOps-инженера
+## Provisioning
 
-Так как у меня нет реального опыта работы DevOps-инженером или системным администратором, я создаю это портфолио чтобы показать, с чем я знаком.
+1. Create VM: 
 
-Сложно показать все нужные навыки в портфолио. Например, тут не покажешь знание сетей или понимание работы UNIX-систем. Но можно показать работу с некоторыми инструментами, что я и постараюсь сделать.
+    `vagrant up`
 
-Каждая директория — показатель моих знаний в конкретном инструменте. В каждой директории есть отдельный readme-файл, где описана суть задачи, как я ее решал и так далее.
+1. [Activate Jenkins](http://192.168.56.100:8080)
 
-Все это на основе реальных примеров, которые я создавал для своих задач. (*Тут надо будет еще что-то дописать*)
+    Get admin password:
+    ```sh
+    vagrant ssh << EOF
+        sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+    EOF
+    ```
+    Do not install any plugins.
 
-* [Jenkins](./jenkins): создание пайплайна для своего пет-проекта.
+1. Create token for your user.
+
+1. `cp .env.example .env`
+
+1. Put your user_id and token in `.env`-file
+
+1. Apply env variables:
+
+    `source .env`
+
+1. Download CLI:
+
+    `wget http://192.168.56.100:8080/jnlpJars/jenkins-cli.jar`
+
+1. Install plugins:
+
+    - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ install-plugin ssh-credentials ws-cleanup git publish-over-ssh -restart`
+
+1. [Configure plugin](http://192.168.56.100:8080/configure) Publish over SSH: 
+    - **Name**: *edtool (test) / edtool (prd)*
+    - **Hostname**: *IP-address*
+    - **Username**: *User*
+    - **Extended => Use password authentication**: *Password*
+
+1. Create templates for credentials:
+
+    - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ -webSocket create-credentials-by-xml system::system::jenkins _ < credentials/front-ssh-key.xml`
+
+1. Configure credentials:
+    - [For github](http://192.168.56.100:8080/credentials/store/system/domain/_/credential/front-ssh-key/update)
+ 
+1. Create tasks:
+
+    `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ create-job front-deploy-test< jobs/front-deploy-test.xml`
+    `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ create-job front-deploy-prd< jobs/front-deploy-prd.xml`
+
+## Deploy
+
+1. Start VM:
+
+    `vagrant up`
+
+1. Setup env:
+
+    `source .env`
+
+1. Run needed task:
+
+    - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ -webSocket build front-deploy-test -s -v`
+    - `java -jar jenkins-cli.jar -s http://192.168.56.100:8080/ -webSocket build front-deploy-prd -s -v`
